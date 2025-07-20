@@ -76,17 +76,21 @@ const authenticateToken = (req, res, next) => {
 
 // Routes
 app.post('/auth/login', (req, res) => {
+  console.log('Login attempt:', { username: req.body.username, hasPassword: !!req.body.password });
+  
   const { username, password } = req.body;
   
   // Simple authentication (replace with your logic)
   if (username === 'admin' && password === 'admin123') {
     const token = jwt.sign({ username }, process.env.JWT_SECRET || 'your-secret-key', { expiresIn: '24h' });
+    console.log('Login successful for user:', username);
     res.json({ 
       token, 
       user: { username, role: 'admin' },
       message: 'Login successful' 
     });
   } else {
+    console.log('Login failed for user:', username);
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
@@ -137,6 +141,16 @@ app.get('/dashboard/projects', authenticateToken, (req, res) => {
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'API is running' });
+});
+
+// Test endpoint
+app.get('/test', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Netlify function is working!',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 module.exports.handler = serverless(app); 

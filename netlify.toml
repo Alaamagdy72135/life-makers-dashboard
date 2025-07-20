@@ -7,6 +7,7 @@
 [build.environment]
   NODE_VERSION = "18"
   CI = "false"
+  JWT_SECRET = "life-makers-foundation-secret-key-2024"
 
 [build.processing]
   skip_processing = false
