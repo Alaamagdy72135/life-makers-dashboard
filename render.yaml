@@ -1,4 +1,5 @@
 services:
+  # Backend Service
   - type: web
     name: life-makers-dashboard-backend
     env: node
@@ -23,4 +24,15 @@ services:
       - key: SHAREPOINT_SITE_URL
         sync: false
       - key: EXCEL_FILE_PATH
-        sync: false 
+        sync: false
+
+  # Frontend Service
+  - type: web
+    name: life-makers-dashboard-frontend
+    env: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://life-makers-dashboard-backend.onrender.com 

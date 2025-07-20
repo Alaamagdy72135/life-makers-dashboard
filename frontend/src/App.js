@@ -211,11 +211,12 @@ function App() {
 
   const fetchData = async (token) => {
     try {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
       const [statsResponse, projectsResponse] = await Promise.all([
-        fetch('http://localhost:5000/api/dashboard/stats', {
+        fetch(`${apiUrl}/api/dashboard/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/dashboard/projects', {
+        fetch(`${apiUrl}/api/dashboard/projects`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -245,7 +246,8 @@ function App() {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
-      await fetch('http://localhost:5000/api/auth/logout', {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      await fetch(`${apiUrl}/api/auth/logout`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
