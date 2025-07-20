@@ -32,9 +32,9 @@ services:
     name: life-makers-dashboard-frontend
     env: node
     plan: free
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    startCommand: node server.js
+    rootDir: src
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && node server.js
     envVars:
       - key: REACT_APP_API_URL
         value: https://life-makers-dashboard-backend.onrender.com 
