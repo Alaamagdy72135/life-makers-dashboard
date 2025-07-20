@@ -1,0 +1,28 @@
+{
+  "name": "life-makers-dashboard",
+  "version": "1.0.0",
+  "description": "Life Makers Foundation Funds Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install",
+    "build-frontend": "cd frontend && npm run build",
+    "start-backend": "cd backend && npm start",
+    "start-frontend": "cd frontend && node server.js",
+    "dev-backend": "cd backend && npm run dev",
+    "dev-frontend": "cd frontend && npm start"
+  },
+  "keywords": [
+    "dashboard",
+    "react",
+    "nodejs",
+    "sharepoint",
+    "life-makers"
+  ],
+  "author": "Life Makers Foundation",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alaamagdy72135/life-makers-dashboard.git"
+  }
+} 
