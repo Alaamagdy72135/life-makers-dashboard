@@ -1,7 +1,22 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "src/frontend/build/index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "src/frontend/build/index.html"
+    }
+  ],
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": "react",
   "outputDirectory": "src/frontend/build",
   "env": {
-    "REACT_APP_API_URL": "https://life-makers-dashboard-backend.onrender.com"
+    "REACT_APP_API_URL": "https://life-makers-dashboard.onrender.com/"
   }
 } 
