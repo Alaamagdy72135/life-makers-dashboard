@@ -1,6 +1,7 @@
 {
   "version": 2,
-  "outputDirectory": "src/frontend/build",
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
   "env": {
     "REACT_APP_API_URL": "https://life-makers-dashboard-backend.onrender.com"
   }
