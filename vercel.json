@@ -6,12 +6,6 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "src/frontend/build/index.html"
-    }
-  ],
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "framework": "react",
