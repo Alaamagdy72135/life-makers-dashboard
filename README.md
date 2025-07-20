@@ -15,10 +15,10 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
 ## Tech Stack
 
 - **Frontend**: React, Material-UI (MUI), Recharts
-- **Backend**: Node.js, Express
-- **Authentication**: Token-based with session management
-- **Data Source**: SharePoint Excel files (with mock data fallback)
-- **Deployment**: Netlify (Frontend), Render (Backend)
+- **Backend**: Netlify Functions (Express.js)
+- **Authentication**: JWT-based with serverless functions
+- **Data Source**: Mock data with realistic projects
+- **Deployment**: Full-stack Netlify (Frontend + Backend)
 
 ## Quick Start
 
@@ -38,53 +38,28 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
 
 2. **Install dependencies**
    ```bash
-   # Install backend dependencies
-   cd backend
-   npm install
-   
    # Install frontend dependencies
-   cd ../src/frontend
+   cd src/frontend
+   npm install
+   
+   # Install function dependencies
+   cd ../../netlify/functions
    npm install
    ```
 
-3. **Set up environment variables**
-   
-   Create a `.env` file in the `backend` directory:
-   ```env
-   # Authentication
-   ADMIN_USERNAME=your_admin_username
-   ADMIN_PASSWORD=your_secure_password
-   
-   # SharePoint Configuration (optional)
-   SHAREPOINT_SITE_URL=https://your-tenant.sharepoint.com/sites/your-site
-   AZURE_CLIENT_ID=your_azure_client_id
-   AZURE_CLIENT_SECRET=your_azure_client_secret
-   AZURE_TENANT_ID=your_azure_tenant_id
-   
-   # MongoDB (optional)
-   MONGODB_URI=mongodb://localhost:27017/life-makers-dashboard
-   
-   # Server Configuration
-   PORT=5000
-   NODE_ENV=development
-   ```
-
-4. **Start the development servers**
+3. **Start the development server**
    ```bash
-   # Start backend (from backend directory)
-   npm start
-   
    # Start frontend (from src/frontend directory)
    npm start
    ```
 
-5. **Access the application**
+4. **Access the application**
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:5000
+   - Functions: Use Netlify CLI for local testing
 
 ## Deployment
 
-### Frontend (Netlify)
+### Full-Stack Netlify Deployment
 
 1. **Connect to Netlify**
    - Go to [netlify.com](https://netlify.com)
@@ -95,35 +70,19 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
    - Base directory: `src/frontend`
    - Build command: `npm run build`
    - Publish directory: `build`
+   - Functions directory: `../netlify/functions`
 
 3. **Add environment variables**
-   - `REACT_APP_API_URL`: Your backend URL (e.g., `https://life-makers-dashboard-backend.onrender.com`)
+   - `JWT_SECRET`: Your secret key for JWT tokens
 
 4. **Deploy**
    - Netlify will automatically deploy on every push to main branch
-
-### Backend (Render)
-
-1. **Deploy to Render**
-   - Go to [render.com](https://render.com)
-   - Create a new Web Service
-   - Connect your GitHub repository
-   - Set the root directory to `backend`
-   - Add all environment variables from the `.env` file
 
 ## Environment Variables
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
-| `ADMIN_USERNAME` | Admin username for login | Yes | `admin` |
-| `ADMIN_PASSWORD` | Admin password for login | Yes | `admin123` |
-| `SHAREPOINT_SITE_URL` | SharePoint site URL | No | - |
-| `AZURE_CLIENT_ID` | Azure AD client ID | No | - |
-| `AZURE_CLIENT_SECRET` | Azure AD client secret | No | - |
-| `AZURE_TENANT_ID` | Azure AD tenant ID | No | - |
-| `MONGODB_URI` | MongoDB connection string | No | - |
-| `PORT` | Server port | No | `5000` |
-| `NODE_ENV` | Environment mode | No | `development` |
+| `JWT_SECRET` | Secret key for JWT tokens | Yes | `life-makers-foundation-secret-key-2024` |
 
 ## Project Structure
 
@@ -137,13 +96,29 @@ life-makers-dashboard/
 │       │   ├── App.js       # Main application
 │       │   └── index.js     # Entry point
 │       └── package.json     # Frontend dependencies
-├── backend/                 # Node.js backend application
-│   ├── services/           # Business logic services
-│   ├── server.js           # Express server
-│   └── package.json        # Backend dependencies
-├── netlify.toml            # Netlify configuration
-└── README.md               # This file
+├── netlify/
+│   └── functions/           # Netlify serverless functions
+│       ├── api.js           # Express API function
+│       └── package.json     # Function dependencies
+├── netlify.toml             # Netlify configuration
+└── README.md                # This file
 ```
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/auth/login` | POST | User authentication |
+| `/api/auth/logout` | POST | User logout |
+| `/api/dashboard/stats` | GET | Dashboard statistics |
+| `/api/dashboard/projects` | GET | Project data |
+| `/api/health` | GET | Health check |
+| `/api/test` | GET | Test endpoint |
+
+## Authentication
+
+- **Username**: `admin`
+- **Password**: `admin123`
 
 ## Features Overview
 
@@ -174,11 +149,11 @@ life-makers-dashboard/
 
 ## Security Features
 
-- Token-based authentication
-- Session management
-- CORS configuration
+- JWT-based authentication
+- Serverless function security
 - Environment variable protection
 - Secure password handling
+- CORS configuration
 
 ## Contributing
 
