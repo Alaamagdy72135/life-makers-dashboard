@@ -75,7 +75,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Routes
-app.post('/api/auth/login', (req, res) => {
+app.post('/auth/login', (req, res) => {
   const { username, password } = req.body;
   
   // Simple authentication (replace with your logic)
@@ -91,11 +91,11 @@ app.post('/api/auth/login', (req, res) => {
   }
 });
 
-app.post('/api/auth/logout', authenticateToken, (req, res) => {
+app.post('/auth/logout', authenticateToken, (req, res) => {
   res.json({ message: 'Logout successful' });
 });
 
-app.get('/api/dashboard/stats', authenticateToken, (req, res) => {
+app.get('/dashboard/stats', authenticateToken, (req, res) => {
   const totalProjects = mockProjects.length;
   const totalBudget = mockProjects.reduce((sum, p) => sum + p.budgetEGP, 0);
   const uniqueDonors = [...new Set(mockProjects.map(p => p.donor))].length;
@@ -130,12 +130,12 @@ app.get('/api/dashboard/stats', authenticateToken, (req, res) => {
   });
 });
 
-app.get('/api/dashboard/projects', authenticateToken, (req, res) => {
+app.get('/dashboard/projects', authenticateToken, (req, res) => {
   res.json(mockProjects);
 });
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'API is running' });
 });
 
