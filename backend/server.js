@@ -10,9 +10,30 @@ const SharePointService = require('./sharepoint');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configure CORS to allow requests from frontend
+// Configure CORS to allow requests from frontend and production
+const allowedOrigins = [
+  'http://localhost:3000', 
+  'http://127.0.0.1:3000',
+  'https://life-makers-dashboard.vercel.app',
+  'https://life-makers-dashboard-frontend.vercel.app'
+];
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      // In production, you might want to be more restrictive
+      if (process.env.NODE_ENV === 'production') {
+        callback(new Error('Not allowed by CORS'));
+      } else {
+        callback(null, true);
+      }
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -20,6 +41,16 @@ app.use(cors({
 
 // Parse JSON bodies
 app.use(express.json());
+
+// Health check endpoint for Render
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0'
+  });
+});
 
 // Simple in-memory session storage (in production, use Redis or database)
 const sessions = new Map();
