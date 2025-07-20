@@ -18,7 +18,7 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
 - **Backend**: Node.js, Express
 - **Authentication**: Token-based with session management
 - **Data Source**: SharePoint Excel files (with mock data fallback)
-- **Deployment**: Vercel (Frontend), Railway/Render (Backend)
+- **Deployment**: Netlify (Frontend), Render (Backend)
 
 ## Quick Start
 
@@ -32,7 +32,7 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/Alaamagdy72135/life-makers-dashboard.git
    cd life-makers-dashboard
    ```
 
@@ -43,7 +43,7 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
    npm install
    
    # Install frontend dependencies
-   cd ../frontend
+   cd ../src/frontend
    npm install
    ```
 
@@ -74,7 +74,7 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
    # Start backend (from backend directory)
    npm start
    
-   # Start frontend (from frontend directory)
+   # Start frontend (from src/frontend directory)
    npm start
    ```
 
@@ -84,34 +84,32 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
 
 ## Deployment
 
-### Frontend (Vercel)
+### Frontend (Netlify)
 
-1. **Connect to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Import your GitHub repository
-   - Set the root directory to `frontend`
-
-2. **Configure environment variables**
-   - Add `REACT_APP_API_URL` pointing to your backend URL
-   - Example: `https://your-backend.railway.app`
-
-3. **Deploy**
-   - Vercel will automatically deploy on every push to main branch
-
-### Backend (Railway/Render)
-
-1. **Deploy to Railway**
-   - Go to [railway.app](https://railway.app)
+1. **Connect to Netlify**
+   - Go to [netlify.com](https://netlify.com)
+   - Click "New site from Git"
    - Connect your GitHub repository
-   - Set the root directory to `backend`
-   - Add all environment variables from the `.env` file
 
-2. **Alternative: Deploy to Render**
+2. **Configure build settings**
+   - Base directory: `src/frontend`
+   - Build command: `npm run build`
+   - Publish directory: `build`
+
+3. **Add environment variables**
+   - `REACT_APP_API_URL`: Your backend URL (e.g., `https://life-makers-dashboard-backend.onrender.com`)
+
+4. **Deploy**
+   - Netlify will automatically deploy on every push to main branch
+
+### Backend (Render)
+
+1. **Deploy to Render**
    - Go to [render.com](https://render.com)
    - Create a new Web Service
    - Connect your GitHub repository
    - Set the root directory to `backend`
-   - Add environment variables
+   - Add all environment variables from the `.env` file
 
 ## Environment Variables
 
@@ -131,17 +129,19 @@ A comprehensive, interactive dashboard for Life Makers Foundation Funds projects
 
 ```
 life-makers-dashboard/
-├── frontend/                 # React frontend application
-│   ├── public/              # Static files
-│   ├── src/                 # Source code
-│   │   ├── components/      # React components
-│   │   ├── App.js          # Main application
-│   │   └── index.js        # Entry point
-│   └── package.json        # Frontend dependencies
+├── src/
+│   └── frontend/            # React frontend application
+│       ├── public/          # Static files
+│       ├── src/             # Source code
+│       │   ├── components/  # React components
+│       │   ├── App.js       # Main application
+│       │   └── index.js     # Entry point
+│       └── package.json     # Frontend dependencies
 ├── backend/                 # Node.js backend application
 │   ├── services/           # Business logic services
 │   ├── server.js           # Express server
 │   └── package.json        # Backend dependencies
+├── netlify.toml            # Netlify configuration
 └── README.md               # This file
 ```
 
@@ -150,8 +150,8 @@ life-makers-dashboard/
 ### Dashboard Components
 - **Overview Tab**: Key metrics and summary statistics
 - **Projects Tab**: Detailed project listings with filtering
-- **Donors Tab**: Donor analysis and insights
-- **Analytics Tab**: Advanced charts and comparisons
+- **Charts Tab**: Advanced data visualizations
+- **Insights Tab**: Analytics and insights
 
 ### Filtering Capabilities
 - Year range selection
