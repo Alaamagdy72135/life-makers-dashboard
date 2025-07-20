@@ -197,12 +197,12 @@ function App() {
 
   const fetchData = async (token) => {
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || '/.netlify/functions/api';
+      const apiUrl = process.env.REACT_APP_API_URL || '/api';
       const [statsResponse, projectsResponse] = await Promise.all([
-        fetch(`${apiUrl}/api/dashboard/stats`, {
+        fetch(`${apiUrl}/dashboard/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${apiUrl}/api/dashboard/projects`, {
+        fetch(`${apiUrl}/dashboard/projects`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -232,8 +232,8 @@ function App() {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
-      const apiUrl = process.env.REACT_APP_API_URL || '/.netlify/functions/api';
-      await fetch(`${apiUrl}/api/auth/logout`, {
+      const apiUrl = process.env.REACT_APP_API_URL || '/api';
+      await fetch(`${apiUrl}/auth/logout`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
