@@ -5,7 +5,6 @@ import {
   Typography,
   Card,
   CardContent,
-  Grid,
   AppBar,
   Toolbar,
   Button,
@@ -200,8 +199,6 @@ function App() {
         stage2Budget: stage2Budget.toLocaleString(),
         yearStats
       });
-    } else {
-      setFilteredStats(null);
     }
   }, [projects, filters, sortConfig]);
 
@@ -423,656 +420,337 @@ function App() {
 
   const FiltersDrawer = () => (
     <Drawer
-      anchor="right"
+      anchor="left"
       open={filtersOpen}
       onClose={() => setFiltersOpen(false)}
-      PaperProps={{
-        sx: {
-          width: isMobile ? '100%' : 400,
-          backgroundColor: '#f8f9fa'
+      sx={{
+        '& .MuiDrawer-paper': {
+          width: isMobile ? '100%' : 320,
+          backgroundColor: 'white',
+          p: 2
         }
       }}
     >
-      <Box sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h6" sx={{ color: BRAND_COLORS.primary, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-            <FilterList sx={{ mr: 1 }} />
-            Filters & Search
-          </Typography>
-          <IconButton onClick={() => setFiltersOpen(false)}>
-            <Close />
-          </IconButton>
-        </Box>
-
-        {/* Search */}
-        <Box sx={{ mb: 3 }}>
-          <TextField
-            fullWidth
-            label="Search Projects/Donors"
-            value={filters.search}
-            onChange={(e) => handleFilterChange('search', e.target.value)}
-            InputProps={{
-              startAdornment: <Search sx={{ mr: 1, color: BRAND_COLORS.lightText }} />
-            }}
-            size="small"
-          />
-        </Box>
-
-        {/* Filter Buttons */}
-        <FilterButtons 
-          title="Filter by Year" 
-          options={uniqueYears} 
-          value={filters.year} 
-          onChange={handleFilterChange} 
-          field="year"
-          icon={<CalendarToday sx={{ fontSize: '1rem', mr: 0.5 }} />}
-        />
-        
-        <FilterButtons 
-          title="Filter by Stage" 
-          options={uniqueStages} 
-          value={filters.stage} 
-          onChange={handleFilterChange} 
-          field="stage"
-          icon={<Layers sx={{ fontSize: '1rem', mr: 0.5 }} />}
-        />
-        
-        <FilterButtons 
-          title="Filter by Donor" 
-          options={uniqueDonors} 
-          value={filters.donor} 
-          onChange={handleFilterChange} 
-          field="donor"
-          icon={<People sx={{ fontSize: '1rem', mr: 0.5 }} />}
-        />
-
-        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Button
-            variant="outlined"
-            onClick={clearFilters}
-            startIcon={<Clear />}
-            sx={{ color: BRAND_COLORS.primary, borderColor: BRAND_COLORS.primary }}
-          >
-            Clear All Filters
-          </Button>
-          <Chip 
-            label={`${filteredProjects.length} of ${projects.length} projects`}
-            color="primary"
-            variant="outlined"
-          />
-        </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h6" sx={{ color: BRAND_COLORS.primary, fontWeight: 'bold' }}>
+          <FilterAlt /> Filters
+        </Typography>
+        <IconButton onClick={() => setFiltersOpen(false)}>
+          <Close />
+        </IconButton>
+      </Box>
+      
+      <FilterButtons
+        title="Donors"
+        options={uniqueDonors}
+        value={filters.donor}
+        onChange={handleFilterChange}
+        field="donor"
+        icon={<People />}
+      />
+      
+      <FilterButtons
+        title="Project Type"
+        options={['International', 'National']}
+        value={filters.type}
+        onChange={handleFilterChange}
+        field="type"
+        icon={<Public />}
+      />
+      
+      <FilterButtons
+        title="Year"
+        options={uniqueYears}
+        value={filters.year}
+        onChange={handleFilterChange}
+        field="year"
+        icon={<CalendarToday />}
+      />
+      
+      <FilterButtons
+        title="Stage"
+        options={uniqueStages}
+        value={filters.stage}
+        onChange={handleFilterChange}
+        field="stage"
+        icon={<Layers />}
+      />
+      
+      <Box sx={{ mt: 2 }}>
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={clearFilters}
+          startIcon={<Clear />}
+          sx={{
+            borderColor: BRAND_COLORS.secondary,
+            color: BRAND_COLORS.secondary,
+            '&:hover': {
+              backgroundColor: BRAND_COLORS.secondary + '20'
+            }
+          }}
+        >
+          Clear All Filters
+        </Button>
       </Box>
     </Drawer>
   );
 
-  const activeFiltersCount = Object.values(filters).filter(f => f !== '').length;
-
   return (
-    <Box sx={{ flexGrow: 1, backgroundColor: '#f5f5f5', minHeight: '100vh', overflowX: 'hidden' }}>
-      <AppBar 
-        position="static" 
-        sx={{ 
-          backgroundColor: BRAND_COLORS.background,
-          backdropFilter: filtersHover ? 'blur(10px)' : 'none',
-          transition: 'backdrop-filter 0.3s ease'
-        }}
-        onMouseEnter={() => setFiltersHover(true)}
-        onMouseLeave={() => setFiltersHover(false)}
-      >
+    <Box sx={{ backgroundColor: BRAND_COLORS.background, minHeight: '100vh' }}>
+      <AppBar position="static" sx={{ backgroundColor: BRAND_COLORS.primary }}>
         <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <Logo size={isMobile ? "small" : "medium"} color="white" />
-            <Typography 
-              variant={isMobile ? "body1" : "h6"} 
-              component="div" 
-              sx={{ color: 'white', fontWeight: 'bold', ml: isMobile ? 1 : 2 }}
-            >
-              Life Makers Foundation Funds
-            </Typography>
-          </Box>
-          
-          <Typography variant="body2" sx={{ mr: 2, color: 'white' }}>
-            Welcome, {user?.username}
+          <Logo />
+          <Typography variant="h6" sx={{ flexGrow: 1, ml: 2, color: 'white' }}>
+            Life Makers Foundation Funds Dashboard
           </Typography>
           
-          <Tooltip title="Filters & Search">
-            <IconButton 
-              color="inherit" 
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton
+              color="inherit"
               onClick={() => setFiltersOpen(true)}
               sx={{ mr: 1 }}
             >
-              <Badge badgeContent={activeFiltersCount} color="error">
-                <FilterAlt />
+              <Badge badgeContent={Object.values(filters).filter(v => v !== '').length} color="secondary">
+                <FilterList />
               </Badge>
             </IconButton>
-          </Tooltip>
-          
-          <Button color="inherit" onClick={handleLogout}>
-            Logout
-          </Button>
+            
+            <Button
+              color="inherit"
+              onClick={handleLogout}
+              startIcon={<Close />}
+            >
+              Logout
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
 
-      {/* Sticky Filter Bar */}
-      <Box sx={{ 
-        position: 'sticky', 
-        top: 0, 
-        zIndex: 1000, 
-        backgroundColor: '#f8f9fa',
-        borderBottom: '1px solid #e0e0e0',
-        py: 1,
-        px: { xs: 1, sm: 2 }
-      }}>
-        <Container maxWidth="xl">
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
-            <Typography variant="body2" sx={{ color: BRAND_COLORS.primary, fontWeight: 'bold', mr: 1 }}>
-              Active Filters:
-            </Typography>
-            {filters.search && (
-              <Chip 
-                label={`Search: "${filters.search}"`} 
-                size="small" 
-                onDelete={() => handleFilterChange('search', '')}
-                sx={{ backgroundColor: BRAND_COLORS.primary, color: 'white' }}
-              />
-            )}
-            {filters.year && (
-              <Chip 
-                label={`Year: ${filters.year}`} 
-                size="small" 
-                onDelete={() => handleFilterChange('year', '')}
-                sx={{ backgroundColor: BRAND_COLORS.secondary, color: 'white' }}
-              />
-            )}
-            {filters.stage && (
-              <Chip 
-                label={`Stage: ${filters.stage}`} 
-                size="small" 
-                onDelete={() => handleFilterChange('stage', '')}
-                sx={{ backgroundColor: BRAND_COLORS.success, color: 'white' }}
-              />
-            )}
-            {filters.donor && (
-              <Chip 
-                label={`Donor: ${filters.donor}`} 
-                size="small" 
-                onDelete={() => handleFilterChange('donor', '')}
-                sx={{ backgroundColor: BRAND_COLORS.warning, color: 'white' }}
-              />
-            )}
-            {activeFiltersCount > 0 && (
-              <Button 
-                size="small" 
-                onClick={clearFilters}
-                sx={{ ml: 'auto', color: BRAND_COLORS.primary }}
-              >
-                Clear All
-              </Button>
-            )}
-          </Box>
-        </Container>
-      </Box>
-
-      <Container maxWidth="xl" sx={{ mt: 2, mb: 3, px: { xs: 1, sm: 2 } }}>
-        {displayStats && (
-          <>
-            {/* Statistics Cards */}
-            <Box sx={{ 
-              display: 'flex', 
-              flexWrap: 'wrap', 
-              gap: 1.5, 
-              mb: 3, 
-              width: '100%',
-              justifyContent: 'space-between'
-            }}>
-                <Card sx={{ 
-                  background: `linear-gradient(135deg, ${BRAND_COLORS.primary} 0%, ${BRAND_COLORS.background} 100%)`,
-                  color: 'white',
-                  transition: 'transform 0.2s',
-                  '&:hover': { transform: 'translateY(-4px)' },
-                  height: '100%',
-                  minHeight: isMobile ? 100 : 120,
-                  flex: '1 1 180px'
-                }}>
-                  <CardContent sx={{ p: isMobile ? 1.5 : 2, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
-                      <Assignment sx={{ fontSize: '1.8rem', mr: 1, opacity: 0.9 }} />
-                      <Typography variant={isMobile ? "body2" : "h6"} sx={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.9rem)', fontWeight: 'bold' }}>
-                        Total Projects
-                      </Typography>
-                    </Box>
-                    <Typography variant={isMobile ? "h4" : "h3"} component="div" sx={{ fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                      {displayStats.totalProjects || '-'}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              
-                              <Card sx={{ 
-                  background: `linear-gradient(135deg, ${BRAND_COLORS.secondary} 0%, #FFB74D 100%)`,
-                  color: 'white',
-                  transition: 'transform 0.2s',
-                  '&:hover': { transform: 'translateY(-4px)' },
-                  height: '100%',
-                  minHeight: isMobile ? 100 : 120,
-                  flex: '1 1 180px'
-                }}>
-                <CardContent sx={{ p: isMobile ? 1.5 : 2, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
-                    <AccountBalance sx={{ fontSize: '1.8rem', mr: 1, opacity: 0.9 }} />
-                    <Typography variant={isMobile ? "body2" : "h6"} sx={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.9rem)', fontWeight: 'bold' }}>
-                      Total Budget (EGP)
-                    </Typography>
-                  </Box>
-                  <Typography variant={isMobile ? "h4" : "h3"} component="div" sx={{ fontWeight: 'bold', fontSize: 'clamp(1.2rem, 3vw, 2rem)' }}>
-                    {displayStats.totalBudget || '-'}
-                  </Typography>
-                </CardContent>
-              </Card>
-              
-                              <Card sx={{ 
-                  background: `linear-gradient(135deg, ${BRAND_COLORS.success} 0%, #66BB6A 100%)`,
-                  color: 'white',
-                  transition: 'transform 0.2s',
-                  '&:hover': { transform: 'translateY(-4px)' },
-                  height: '100%',
-                  minHeight: isMobile ? 100 : 120,
-                  flex: '1 1 180px'
-                }}>
-                <CardContent sx={{ p: isMobile ? 1.5 : 2, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
-                    <Group sx={{ fontSize: '1.8rem', mr: 1, opacity: 0.9 }} />
-                    <Typography variant={isMobile ? "body2" : "h6"} sx={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.9rem)', fontWeight: 'bold' }}>
-                      Unique Donors
-                    </Typography>
-                  </Box>
-                  <Typography variant={isMobile ? "h4" : "h3"} component="div" sx={{ fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                    {displayStats.uniqueDonors || '-'}
-                  </Typography>
-                </CardContent>
-              </Card>
-              
-                              <Card sx={{ 
-                  background: `linear-gradient(135deg, ${BRAND_COLORS.warning} 0%, #FFA726 100%)`,
-                  color: 'white',
-                  transition: 'transform 0.2s',
-                  '&:hover': { transform: 'translateY(-4px)' },
-                  height: '100%',
-                  minHeight: isMobile ? 100 : 120,
-                  flex: '1 1 180px'
-                }}>
-                <CardContent sx={{ p: isMobile ? 1.5 : 2, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
-                    <Public sx={{ fontSize: '1.8rem', mr: 1, opacity: 0.9 }} />
-                    <Typography variant={isMobile ? "body2" : "h6"} sx={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.9rem)', fontWeight: 'bold' }}>
-                      International
-                    </Typography>
-                  </Box>
-                  <Typography variant={isMobile ? "h4" : "h3"} component="div" sx={{ fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                    {displayStats.internationalDonors || '-'}
-                  </Typography>
-                </CardContent>
-              </Card>
-
-                              <Card sx={{ 
-                  background: `linear-gradient(135deg, ${BRAND_COLORS.error} 0%, #EF5350 100%)`,
-                  color: 'white',
-                  transition: 'transform 0.2s',
-                  '&:hover': { transform: 'translateY(-4px)' },
-                  height: '100%',
-                  minHeight: isMobile ? 100 : 120,
-                  flex: '1 1 180px'
-                }}>
-                <CardContent sx={{ p: isMobile ? 1.5 : 2, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1 }}>
-                    <Flag sx={{ fontSize: '1.8rem', mr: 1, opacity: 0.9 }} />
-                    <Typography variant={isMobile ? "body2" : "h6"} sx={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.9rem)', fontWeight: 'bold' }}>
-                      National
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography variant={isMobile ? "h4" : "h3"} component="div" sx={{ fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                      {displayStats.nationalDonors || '-'}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Box>
-
-            {/* Tabs for different views */}
-            <Card sx={{ mb: 4 }}>
-              <Tabs 
-                value={activeTab} 
-                onChange={(e, newValue) => setActiveTab(newValue)}
-                variant={isMobile ? "scrollable" : "fullWidth"}
-                scrollButtons={isMobile ? "auto" : false}
-                sx={{ 
-                  borderBottom: 1, 
-                  borderColor: 'divider',
-                  '& .MuiTab-root': { color: BRAND_COLORS.text, fontSize: isMobile ? '0.8rem' : '1rem' }
-                }}
-              >
-                <Tab label="Overview" icon={<Analytics />} />
-                <Tab label="Trends & Insights" icon={<TrendingUp />} />
-                <Tab label="Comparisons" icon={<Compare />} />
-                <Tab label="Projects Data" icon={<FilterList />} />
-              </Tabs>
-
-              <Box sx={{ p: isMobile ? 2 : 3 }}>
-                {activeTab === 0 && (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                    <Card sx={{ flex: '1 1 400px' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom sx={{ color: BRAND_COLORS.primary, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
-                          Projects by Stage
-                        </Typography>
-                                                  <ResponsiveContainer width="100%" height={isMobile ? 200 : 250}>
-                            <BarChart data={chartData} margin={{ left: 20, right: 20, top: 20, bottom: 20 }}>
-                              <CartesianGrid strokeDasharray="3 3" />
-                              <XAxis dataKey="name" />
-                              <YAxis tickFormatter={(value) => value.toLocaleString()} />
-                              <RechartsTooltip 
-                                formatter={(value, name) => [
-                                  name === 'Budget (EGP)' ? `${value.toLocaleString()} EGP` : value,
-                                  name
-                                ]}
-                                labelFormatter={(label) => `${label} (${chartData.find(d => d.name === label)?.growth})`}
-                              />
-                              <Legend />
-                              <Bar dataKey="projects" fill={BRAND_COLORS.primary} name="Projects">
-                                {chartData.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={BRAND_COLORS.primary} />
-                                ))}
-                              </Bar>
-                              <Bar dataKey="budget" fill={BRAND_COLORS.secondary} name="Budget (EGP)">
-                                {chartData.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={BRAND_COLORS.secondary} />
-                                ))}
-                              </Bar>
-                            </BarChart>
-                          </ResponsiveContainer>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card sx={{ flex: '1 1 400px' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom sx={{ color: BRAND_COLORS.primary, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
-                          Donor Types Distribution
-                        </Typography>
-                                                  <ResponsiveContainer width="100%" height={isMobile ? 200 : 250}>
-                            <PieChart>
-                              <Pie
-                                data={donorTypeData}
-                                cx="50%"
-                                cy="50%"
-                                labelLine={false}
-                                label={({ name, value, percent }) => `${name}\n${value} (${(percent * 100).toFixed(0)}%)`}
-                                outerRadius={isMobile ? 50 : 70}
-                                fill="#8884d8"
-                                dataKey="value"
-                              >
-                                {donorTypeData.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                              </Pie>
-                              <RechartsTooltip 
-                                formatter={(value, name) => [value, name]}
-                                labelFormatter={(label) => `${label} Donors`}
-                              />
-                            </PieChart>
-                          </ResponsiveContainer>
-                      </CardContent>
-                    </Card>
-                  </Box>
-                )}
-
-                {activeTab === 1 && (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                    <Card sx={{ flex: '2 1 600px' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom sx={{ color: BRAND_COLORS.primary, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
-                          Projects & Budget Trends by Year
-                        </Typography>
-                                                  <ResponsiveContainer width="100%" height={isMobile ? 250 : 350}>
-                            <AreaChart data={yearChartData} margin={{ left: 20, right: 20, top: 20, bottom: 20 }}>
-                              <CartesianGrid strokeDasharray="3 3" />
-                              <XAxis dataKey="year" />
-                              <YAxis tickFormatter={(value) => value.toLocaleString()} />
-                              <RechartsTooltip 
-                                formatter={(value, name) => [
-                                  name === 'Budget (EGP)' ? `${value.toLocaleString()} EGP` : value,
-                                  name
-                                ]}
-                                labelFormatter={(label) => `${label} (${yearChartData.find(d => d.year === label)?.growth})`}
-                              />
-                              <Legend />
-                              <Area 
-                                type="monotone" 
-                                dataKey="projects" 
-                                stackId="1"
-                                stroke={BRAND_COLORS.primary} 
-                                fill={BRAND_COLORS.primary} 
-                                fillOpacity={0.6}
-                                name="Projects" 
-                              />
-                              <Area 
-                                type="monotone" 
-                                dataKey="budget" 
-                                stackId="2"
-                                stroke={BRAND_COLORS.secondary} 
-                                fill={BRAND_COLORS.secondary} 
-                                fillOpacity={0.6}
-                                name="Budget (EGP)" 
-                              />
-                            </AreaChart>
-                          </ResponsiveContainer>
-                      </CardContent>
-                    </Card>
-                    <Box sx={{ flex: '1 1 300px' }}>
-                      <Insights stats={displayStats} projects={filteredProjects} />
-                    </Box>
-                  </Box>
-                )}
-
-                {activeTab === 2 && (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                    <Card sx={{ flex: '1 1 400px' }}>
-                        <CardContent>
-                          <Typography variant="h6" gutterBottom sx={{ color: BRAND_COLORS.primary, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
-                            Stage Comparison
-                          </Typography>
-                          <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', mt: 3 }}>
-                            <Box sx={{ textAlign: 'center' }}>
-                              <Typography variant={isMobile ? "h5" : "h4"} sx={{ color: BRAND_COLORS.success, fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                                {displayStats.stage1Projects || '-'}
-                              </Typography>
-                              <Typography variant="body2" color="text.secondary" sx={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>
-                                Stage 1 Projects
-                              </Typography>
-                              <Typography variant={isMobile ? "body1" : "h6"} sx={{ color: BRAND_COLORS.success, fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)' }}>
-                                {displayStats.stage1Budget || '-'}
-                              </Typography>
-                            </Box>
-                            <Divider orientation="vertical" flexItem />
-                            <Box sx={{ textAlign: 'center' }}>
-                              <Typography variant={isMobile ? "h5" : "h4"} sx={{ color: BRAND_COLORS.warning, fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                                {displayStats.stage2Projects || '-'}
-                              </Typography>
-                              <Typography variant="body2" color="text.secondary" sx={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>
-                                Stage 2 Projects
-                              </Typography>
-                              <Typography variant={isMobile ? "body1" : "h6"} sx={{ color: BRAND_COLORS.warning, fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)' }}>
-                                {displayStats.stage2Budget || '-'}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </CardContent>
-                      </Card>
-                    
-                    <Card sx={{ flex: '1 1 400px' }}>
-                      <CardContent>
-                        <Typography variant="h6" gutterBottom sx={{ color: BRAND_COLORS.primary, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
-                          Donor Type Comparison
-                        </Typography>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', mt: 3 }}>
-                          <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant={isMobile ? "h5" : "h4"} sx={{ color: BRAND_COLORS.primary, fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                              {displayStats.internationalDonors || '-'}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>
-                              International
-                            </Typography>
-                          </Box>
-                          <Divider orientation="vertical" flexItem />
-                          <Box sx={{ textAlign: 'center' }}>
-                            <Typography variant={isMobile ? "h5" : "h4"} sx={{ color: BRAND_COLORS.secondary, fontWeight: 'bold', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
-                              {displayStats.nationalDonors || '-'}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>
-                              National
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Box>
-                )}
-
-                {activeTab === 3 && (
-                  <Box>
-                    {/* Projects Table */}
-                    <Card>
-                      <CardContent>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 1 }}>
-                          <Typography variant="h6" sx={{ color: BRAND_COLORS.primary, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
-                            Projects Data ({filteredProjects.length} projects)
-                          </Typography>
-                          <Box>
-                            <Tooltip title="Export Data">
-                              <IconButton sx={{ color: BRAND_COLORS.primary }}>
-                                <Download />
-                              </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Refresh">
-                              <IconButton sx={{ color: BRAND_COLORS.primary }}>
-                                <Refresh />
-                              </IconButton>
-                            </Tooltip>
-                          </Box>
-                        </Box>
-                        
-                        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
-                          <Table stickyHeader size={isMobile ? "small" : "medium"}>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell 
-                                  onClick={() => handleSort('project')}
-                                  sx={{ cursor: 'pointer', backgroundColor: BRAND_COLORS.primary, color: 'white', fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
-                                >
-                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    Project
-                                    <Sort sx={{ ml: 1 }} />
-                                  </Box>
-                                </TableCell>
-                                <TableCell 
-                                  onClick={() => handleSort('donor')}
-                                  sx={{ cursor: 'pointer', backgroundColor: BRAND_COLORS.primary, color: 'white', fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
-                                >
-                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    Donor
-                                    <Sort sx={{ ml: 1 }} />
-                                  </Box>
-                                </TableCell>
-                                <TableCell sx={{ backgroundColor: BRAND_COLORS.primary, color: 'white', fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>Type</TableCell>
-                                <TableCell 
-                                  onClick={() => handleSort('year')}
-                                  sx={{ cursor: 'pointer', backgroundColor: BRAND_COLORS.primary, color: 'white', fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
-                                >
-                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    Year
-                                    <Sort sx={{ ml: 1 }} />
-                                  </Box>
-                                </TableCell>
-                                <TableCell 
-                                  onClick={() => handleSort('budgetEGP')}
-                                  sx={{ cursor: 'pointer', backgroundColor: BRAND_COLORS.primary, color: 'white', fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
-                                >
-                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    Budget (EGP)
-                                    <Sort sx={{ ml: 1 }} />
-                                  </Box>
-                                </TableCell>
-                                <TableCell sx={{ backgroundColor: BRAND_COLORS.primary, color: 'white', fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>Stage</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {filteredProjects.map((project) => (
-                                <TableRow key={project.id} hover>
-                                  <TableCell sx={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>{project.project || '-'}</TableCell>
-                                  <TableCell sx={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>{project.donor || '-'}</TableCell>
-                                  <TableCell>
-                                    <Chip 
-                                      label={project.type} 
-                                      color={project.type === 'International' ? 'primary' : 'secondary'}
-                                      size="small"
-                                      sx={{ 
-                                        backgroundColor: project.type === 'International' ? BRAND_COLORS.primary : BRAND_COLORS.secondary,
-                                        color: 'white',
-                                        fontSize: 'clamp(0.7rem, 1.8vw, 0.875rem)'
-                                      }}
-                                    />
-                                  </TableCell>
-                                  <TableCell sx={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>{project.year || '-'}</TableCell>
-                                  <TableCell sx={{ fontWeight: 'bold', fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}>
-                                    {project.budgetEGP ? project.budgetEGP.toLocaleString() : '-'}
-                                  </TableCell>
-                                  <TableCell>
-                                    <Chip 
-                                      label={project.stage} 
-                                      color={project.stage === 'Stage1' ? 'success' : 'warning'}
-                                      size="small"
-                                      sx={{ 
-                                        backgroundColor: project.stage === 'Stage1' ? BRAND_COLORS.success : BRAND_COLORS.warning,
-                                        color: 'white',
-                                        fontSize: 'clamp(0.7rem, 1.8vw, 0.875rem)'
-                                      }}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </CardContent>
-                    </Card>
-                  </Box>
-                )}
-              </Box>
-            </Card>
-          </>
-        )}
-      </Container>
-
-      {/* Filters Drawer */}
       <FiltersDrawer />
 
-      {/* Floating Action Button for Mobile */}
-      {isMobile && (
-        <Fab
-          color="primary"
-          aria-label="filters"
-          onClick={() => setFiltersOpen(true)}
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-            backgroundColor: BRAND_COLORS.primary
-          }}
-        >
-          <Badge badgeContent={activeFiltersCount} color="error">
-            <FilterAlt />
-          </Badge>
-        </Fab>
-      )}
+      <Container maxWidth="xl" sx={{ py: 3 }}>
+        {/* Stats Cards */}
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' }, gap: 2, mb: 3 }}>
+          <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)' }}>
+            <CardContent>
+              <Typography variant="h4" sx={{ color: BRAND_COLORS.primary, fontWeight: 'bold' }}>
+                {displayStats?.totalProjects || 0}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Total Projects
+              </Typography>
+            </CardContent>
+          </Card>
+          
+          <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)' }}>
+            <CardContent>
+              <Typography variant="h4" sx={{ color: BRAND_COLORS.secondary, fontWeight: 'bold' }}>
+                {displayStats?.totalBudget || '0'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Total Budget (EGP)
+              </Typography>
+            </CardContent>
+          </Card>
+          
+          <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)' }}>
+            <CardContent>
+              <Typography variant="h4" sx={{ color: BRAND_COLORS.success, fontWeight: 'bold' }}>
+                {displayStats?.uniqueDonors || 0}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Unique Donors
+              </Typography>
+            </CardContent>
+          </Card>
+          
+          <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)' }}>
+            <CardContent>
+              <Typography variant="h4" sx={{ color: BRAND_COLORS.warning, fontWeight: 'bold' }}>
+                {displayStats?.internationalDonors || 0}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                International Donors
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
+
+        {/* Search Bar */}
+        <Paper sx={{ p: 2, mb: 3, backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)' }}>
+          <TextField
+            fullWidth
+            placeholder="Search projects or donors..."
+            value={filters.search}
+            onChange={(e) => handleFilterChange('search', e.target.value)}
+            InputProps={{
+              startAdornment: <Search sx={{ mr: 1, color: BRAND_COLORS.primary }} />
+            }}
+          />
+        </Paper>
+
+        {/* Tabs */}
+        <Paper sx={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)' }}>
+          <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tab label="Overview" icon={<Analytics />} />
+            <Tab label="Projects" icon={<Assignment />} />
+            <Tab label="Charts" icon={<BarChart />} />
+            <Tab label="Insights" icon={<TrendingUp />} />
+          </Tabs>
+
+          {/* Tab Content */}
+          <Box sx={{ p: 3 }}>
+            {activeTab === 0 && (
+              <Box>
+                <Typography variant="h5" sx={{ mb: 3, color: BRAND_COLORS.primary, fontWeight: 'bold' }}>
+                  Dashboard Overview
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 2 }}>
+                  Welcome to the Life Makers Foundation Funds Dashboard. Here you can view and analyze project funding data, donor statistics, and track progress across different stages.
+                </Typography>
+                <Insights stats={displayStats} />
+              </Box>
+            )}
+
+            {activeTab === 1 && (
+              <Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                  <Typography variant="h5" sx={{ color: BRAND_COLORS.primary, fontWeight: 'bold' }}>
+                    Projects List
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Showing {filteredProjects.length} of {projects.length} projects
+                  </Typography>
+                </Box>
+                
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Project</TableCell>
+                        <TableCell>Donor</TableCell>
+                        <TableCell>Type</TableCell>
+                        <TableCell>Year</TableCell>
+                        <TableCell>Budget (EGP)</TableCell>
+                        <TableCell>Stage</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filteredProjects.map((project) => (
+                        <TableRow key={project.id}>
+                          <TableCell>{project.project}</TableCell>
+                          <TableCell>{project.donor}</TableCell>
+                          <TableCell>
+                            <Chip 
+                              label={project.type} 
+                              size="small"
+                              sx={{ 
+                                backgroundColor: project.type === 'International' ? BRAND_COLORS.primary : BRAND_COLORS.secondary,
+                                color: 'white'
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell>{project.year}</TableCell>
+                          <TableCell>{project.budgetEGP.toLocaleString()}</TableCell>
+                          <TableCell>
+                            <Chip 
+                              label={project.stage} 
+                              size="small"
+                              sx={{ 
+                                backgroundColor: project.stage === 'Stage1' ? BRAND_COLORS.success : BRAND_COLORS.warning,
+                                color: 'white'
+                              }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            )}
+
+            {activeTab === 2 && (
+              <Box>
+                <Typography variant="h5" sx={{ mb: 3, color: BRAND_COLORS.primary, fontWeight: 'bold' }}>
+                  Data Visualization
+                </Typography>
+                
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' }, gap: 3, mb: 3 }}>
+                  <Card sx={{ p: 2 }}>
+                    <Typography variant="h6" sx={{ mb: 2, color: BRAND_COLORS.primary }}>
+                      Stage Comparison
+                    </Typography>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <RechartsTooltip />
+                        <Legend />
+                        <Bar dataKey="projects" fill={BRAND_COLORS.primary} name="Projects" />
+                        <Bar dataKey="budget" fill={BRAND_COLORS.secondary} name="Budget (EGP)" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </Card>
+                  
+                  <Card sx={{ p: 2 }}>
+                    <Typography variant="h6" sx={{ mb: 2, color: BRAND_COLORS.primary }}>
+                      Donor Types
+                    </Typography>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={donorTypeData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {donorTypeData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <RechartsTooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Card>
+                </Box>
+                
+                <Card sx={{ p: 2 }}>
+                  <Typography variant="h6" sx={{ mb: 2, color: BRAND_COLORS.primary }}>
+                    Year-over-Year Trends
+                  </Typography>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart data={yearChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="year" />
+                      <YAxis />
+                      <RechartsTooltip />
+                      <Legend />
+                      <Area type="monotone" dataKey="projects" stackId="1" stroke={BRAND_COLORS.primary} fill={BRAND_COLORS.primary} name="Projects" />
+                      <Area type="monotone" dataKey="budget" stackId="2" stroke={BRAND_COLORS.secondary} fill={BRAND_COLORS.secondary} name="Budget (EGP)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </Card>
+              </Box>
+            )}
+
+            {activeTab === 3 && (
+              <Box>
+                <Typography variant="h5" sx={{ mb: 3, color: BRAND_COLORS.primary, fontWeight: 'bold' }}>
+                  Insights & Analytics
+                </Typography>
+                <Insights stats={displayStats} />
+              </Box>
+            )}
+          </Box>
+        </Paper>
+      </Container>
     </Box>
   );
 }
