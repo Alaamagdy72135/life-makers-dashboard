@@ -75,7 +75,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Routes
-app.post('/auth/login', (req, res) => {
+app.post('/api/auth/login', (req, res) => {
   console.log('Login attempt:', { username: req.body.username, hasPassword: !!req.body.password });
   
   const { username, password } = req.body;
@@ -95,11 +95,11 @@ app.post('/auth/login', (req, res) => {
   }
 });
 
-app.post('/auth/logout', authenticateToken, (req, res) => {
+app.post('/api/auth/logout', authenticateToken, (req, res) => {
   res.json({ message: 'Logout successful' });
 });
 
-app.get('/dashboard/stats', authenticateToken, (req, res) => {
+app.get('/api/dashboard/stats', authenticateToken, (req, res) => {
   const totalProjects = mockProjects.length;
   const totalBudget = mockProjects.reduce((sum, p) => sum + p.budgetEGP, 0);
   const uniqueDonors = [...new Set(mockProjects.map(p => p.donor))].length;
@@ -134,17 +134,17 @@ app.get('/dashboard/stats', authenticateToken, (req, res) => {
   });
 });
 
-app.get('/dashboard/projects', authenticateToken, (req, res) => {
+app.get('/api/dashboard/projects', authenticateToken, (req, res) => {
   res.json(mockProjects);
 });
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'API is running' });
 });
 
 // Test endpoint
-app.get('/test', (req, res) => {
+app.get('/api/test', (req, res) => {
   res.json({ 
     status: 'OK', 
     message: 'Netlify function is working!',
