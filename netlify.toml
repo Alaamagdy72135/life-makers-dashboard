@@ -2,9 +2,15 @@
   base = "src/frontend"
   command = "npm run build"
   publish = "build"
+  functions = "../netlify/functions"
 
 [build.environment]
-  REACT_APP_API_URL = "https://life-makers-dashboard-backend.onrender.com"
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"

@@ -208,7 +208,7 @@ function App() {
 
   const fetchData = async (token) => {
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const apiUrl = process.env.REACT_APP_API_URL || '/.netlify/functions/api';
       const [statsResponse, projectsResponse] = await Promise.all([
         fetch(`${apiUrl}/api/dashboard/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -243,7 +243,7 @@ function App() {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('token');
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const apiUrl = process.env.REACT_APP_API_URL || '/.netlify/functions/api';
       await fetch(`${apiUrl}/api/auth/logout`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }

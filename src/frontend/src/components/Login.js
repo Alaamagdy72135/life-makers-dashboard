@@ -34,7 +34,7 @@ const Login = ({ onLogin }) => {
     setError('');
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const apiUrl = process.env.REACT_APP_API_URL || '/.netlify/functions/api';
       const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -45,7 +45,7 @@ const Login = ({ onLogin }) => {
 
       const data = await response.json();
 
-      if (data.success) {
+      if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         onLogin(data.token, data.user);

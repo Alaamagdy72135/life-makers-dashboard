@@ -1,21 +1,23 @@
 {
   "name": "life-makers-dashboard",
   "version": "1.0.0",
-  "description": "Life Makers Foundation Funds Dashboard",
+  "description": "Life Makers Foundation Funds Dashboard - Full Stack Netlify",
   "main": "index.js",
   "scripts": {
     "install-backend": "cd backend && npm install",
     "install-frontend": "cd src/frontend && npm install",
+    "install-functions": "cd netlify/functions && npm install",
     "build-frontend": "cd src/frontend && npm run build",
     "start-backend": "cd backend && npm start",
     "dev-backend": "cd backend && npm run dev",
-    "dev-frontend": "cd src/frontend && npm start"
+    "dev-frontend": "cd src/frontend && npm start",
+    "build": "npm run install-functions && npm run build-frontend"
   },
   "keywords": [
     "dashboard",
     "react",
-    "nodejs",
-    "sharepoint",
+    "netlify",
+    "functions",
     "life-makers"
   ],
   "author": "Life Makers Foundation",
