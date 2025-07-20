@@ -25,20 +25,4 @@ services:
       - key: SHAREPOINT_SITE_URL
         sync: false
       - key: EXCEL_FILE_PATH
-        sync: false
-
-  # Frontend Service
-  - type: web
-    name: life-makers-dashboard-frontend
-    env: node
-    plan: free
-    buildCommand: |
-      pwd
-      ls -la
-      cd src/frontend
-      npm install
-      npm run build
-    startCommand: cd src/frontend && node server.js
-    envVars:
-      - key: REACT_APP_API_URL
-        value: https://life-makers-dashboard-backend.onrender.com 
+        sync: false 
