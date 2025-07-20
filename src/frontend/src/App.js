@@ -18,17 +18,13 @@ import {
   Chip,
   TextField,
   IconButton,
-  Tooltip,
   Tabs,
   Tab,
-  Divider,
   LinearProgress,
   useTheme,
   useMediaQuery,
   Drawer,
-  Fab,
-  Badge,
-  Collapse
+  Badge
 } from '@mui/material';
 import {
   BarChart,
@@ -47,22 +43,15 @@ import {
 } from 'recharts';
 import {
   FilterList,
-  Sort,
   TrendingUp,
   Analytics,
-  Compare,
-  Refresh,
-  Download,
   Search,
   CalendarToday,
   Layers,
   People,
   Clear,
   Assignment,
-  AccountBalance,
-  Group,
   Public,
-  Flag,
   Close,
   FilterAlt
 } from '@mui/icons-material';

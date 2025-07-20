@@ -1,11 +1,15 @@
 [build]
   base = "src/frontend"
-  command = "npm run build"
+  command = "npm install && npm run build"
   publish = "build"
   functions = "../netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18"
+  CI = "false"
+
+[build.processing]
+  skip_processing = false
 
 [[redirects]]
   from = "/api/*"
